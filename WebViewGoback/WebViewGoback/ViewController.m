@@ -8,7 +8,10 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController ()<UIWebViewDelegate>
+{
+    NSMutableArray * dataArray ;
+}
 @property (strong,nonatomic)IBOutlet  UIWebView * webView  ;
 
 @end
@@ -17,13 +20,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    dataArray = [[NSMutableArray alloc]init];
     NSURL *url =[NSURL URLWithString:@"http://news.baidu.com"];
     NSURLRequest *request =[NSURLRequest requestWithURL:url];
     [_webView loadRequest:request];
     UIBarButtonItem * backButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"back" style:UIBarButtonItemStylePlain target:self action:@selector(backButtonItemEvent:)];
      UIBarButtonItem * closeButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"close" style:UIBarButtonItemStylePlain target:self action:@selector(closeButtonItemEvent:)];
+    [dataArray addObject:backButtonItem];
+    [dataArray addObject:closeButtonItem];
 
-    self.navigationItem.leftBarButtonItems = @[backButtonItem,closeButtonItem];
+//    self.navigationItem.leftBarButtonItems = @[backButtonItem,closeButtonItem];
+    self.navigationItem.leftBarButtonItem = backButtonItem ;
 
 }
 
@@ -31,6 +38,7 @@
 -(void)backButtonItemEvent:(UIBarButtonItem *)item {
     if ([_webView canGoBack]) {
          [_webView goBack];
+        self.navigationItem.leftBarButtonItems = dataArray;
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
